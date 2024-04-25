@@ -1,0 +1,31 @@
+<div class="flex flex-col">
+  <div class="m-6 flex flex-row justify-center">
+    <form class="example-form w-1/4">
+      <mat-form-field class="example-full-width items-center w-full">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Beispiel: Dennis Heine" (keyup)="onKey($event)">
+      </mat-form-field>
+    </form>
+    <button class="m-3" mat-raised-button (click)="identifyNameParts()">erkennen</button>
+  </div>
+  <div class="flex flex-row justify-center">
+    <form class="example-form w-full flex flex-row">
+      <mat-form-field class="example-full-width items-center w-full m-4">
+        <mat-label>Geschlecht</mat-label>
+        <input matInput [(ngModel)]="gender" name="gender">
+      </mat-form-field>
+      <mat-form-field class="example-full-width items-center w-full m-4">
+        <mat-label>Titel</mat-label>
+        <input matInput [(ngModel)]="title" name="title">
+      </mat-form-field>
+      <mat-form-field class="example-full-width items-center w-full m-4">
+        <mat-label>Vorname</mat-label>
+        <input matInput [(ngModel)]="firstName" name="firstName">
+      </mat-form-field>
+      <mat-form-field class="example-full-width items-center w-full m-4">
+        <mat-label>Nachname</mat-label>
+        <input matInput [(ngModel)]="lastName" name="lastName">
+      </mat-form-field>
+    </form>
+  </div>
+</div>
