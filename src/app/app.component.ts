@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {SplitifyComponent} from "../components/splitify/splitify.component";
+import {SplitifyComponent} from "./components/splitify/splitify.component";
 
 @Component({
   selector: 'app-root',
