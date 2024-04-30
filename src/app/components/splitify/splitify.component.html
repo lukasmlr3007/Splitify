@@ -28,4 +28,16 @@
       </mat-form-field>
     </form>
   </div>
+  <div class="flex flex-row justify-center">
+    <mat-form-field>
+      <mat-label>Art der Grußform</mat-label>
+      <mat-select [(value)]="greetingType">
+        <mat-option *ngFor="let type of greetingTypes" [value]="type.value">{{type.viewValue}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button class="m-3" mat-raised-button (click)="generateGreeting()">Grußformel generieren</button>
+  </div>
+  <div class="flex flex-row justify-center">
+    <p class="h-[50vh] w-[50vw]">{{greeting}}</p>
+  </div>
 </div>
