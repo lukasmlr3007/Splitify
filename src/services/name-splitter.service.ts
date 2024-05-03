@@ -14,6 +14,7 @@ export class NameSplitterService {
     let male: boolean = false;
     let hasTitle: boolean = false;
     let hasDoubleTitle: boolean = false;
+    let hasLastNameBeforeFirstName: boolean = false;
     let result: NameModel = {
       gender: "",
       title: "",
@@ -21,6 +22,9 @@ export class NameSplitterService {
       lastName: "",
     }
 
+    if (name.includes(",")){
+      hasLastNameBeforeFirstName = true
+    }
     if (name.includes("Dr ")
       || name.includes("Dr. ")
       || name.includes("Prof ")
@@ -42,41 +46,116 @@ export class NameSplitterService {
       male = true;
     }
 
+    name = name.replace(",", "")
     let parts: string[] = name.split(" ");
     console.log("NameSplitter: " + name);
+    console.log(parts)
+    console.log(parts.length)
 
-    if (hasTitle && !hasGender && !hasDoubleTitle) {
-      result.title = parts[0]
-      result.firstName = parts[1]
-      result.lastName = parts[2]
-      result.hasTitle = true
-    } else if (!hasTitle && hasGender) {
-      result.gender = parts[0]
-      result.firstName = parts[1]
-      result.lastName = parts[2]
-      result.male = male
-    } else if (hasTitle && hasGender && !hasDoubleTitle) {
-      result.gender = parts[0]
-      result.title = parts[1]
-      result.firstName = parts[2]
-      result.lastName = parts[3]
-      result.hasTitle = true
-      result.male = male
-    } else if(hasTitle && hasDoubleTitle && !hasGender) {
-      result.title = parts[0] + " " + parts[1]
-      result.firstName = parts[2]
-      result.lastName = parts[3]
-      result.hasTitle = true
-    } else if(hasTitle && hasDoubleTitle && hasGender) {
-      result.gender = parts[0]
-      result.title = parts[1] + " " + parts[2]
-      result.firstName = parts[3]
-      result.lastName = parts[4]
-      result.hasTitle = true
-      result.male = male
-    } else {
-      result.firstName = parts[0]
-      result.lastName = parts[1]
+    if (!hasLastNameBeforeFirstName) {
+      if (hasTitle && !hasGender && !hasDoubleTitle) {
+        result.title = parts[0]
+        result.firstName = parts[1]
+        for (let i = 2; i < parts.length; i++) {
+          result.lastName = result.lastName + " " + parts[i]
+          result.lastName = result.lastName.trim()
+        }
+        result.hasTitle = true
+      } else if (!hasTitle && hasGender) {
+        result.gender = parts[0]
+        result.firstName = parts[1]
+        for (let i = 2; i < parts.length; i++) {
+          result.lastName = result.lastName + " " + parts[i]
+          result.lastName = result.lastName.trim()
+        }
+        result.male = male
+      } else if (hasTitle && hasGender && !hasDoubleTitle) {
+        result.gender = parts[0]
+        result.title = parts[1]
+        result.firstName = parts[2]
+        for (let i = 3; i < parts.length; i++) {
+          result.lastName = result.lastName + " " + parts[i]
+          result.lastName = result.lastName.trim()
+        }
+        result.hasTitle = true
+        result.male = male
+      } else if (hasTitle && hasDoubleTitle && !hasGender) {
+        result.title = parts[0] + " " + parts[1]
+        result.firstName = parts[2]
+        for (let i = 3; i < parts.length; i++) {
+          result.lastName = result.lastName + " " + parts[i]
+          result.lastName = result.lastName.trim()
+        }
+        result.hasTitle = true
+      } else if (hasTitle && hasDoubleTitle && hasGender) {
+        result.gender = parts[0]
+        result.title = parts[1] + " " + parts[2]
+        result.firstName = parts[3]
+        for (let i = 4; i < parts.length; i++) {
+          result.lastName = result.lastName + " " + parts[i]
+          result.lastName = result.lastName.trim()
+        }
+        result.hasTitle = true
+        result.male = male
+      } else {
+        result.firstName = parts[0]
+        for (let i = 1; i < parts.length; i++) {
+          result.lastName = result.lastName + " " + parts[i]
+          result.lastName = result.lastName.trim()
+        }
+      }
+    } else if(hasLastNameBeforeFirstName){
+      if (hasTitle && !hasGender && !hasDoubleTitle) {
+        result.title = parts[0]
+        result.firstName = parts[parts.length-1]
+        for (let i = 1; i < parts.length - 1; i++) {
+          result.lastName = result.lastName + " " + parts[i]
+          result.lastName = result.lastName.trim()
+        }
+        result.hasTitle = true
+      } else if (!hasTitle && hasGender) {
+        result.gender = parts[0]
+        result.firstName = parts[parts.length-1]
+        for (let i = 1; i < parts.length - 1; i++) {
+          result.lastName = result.lastName + " " + parts[i]
+          result.lastName = result.lastName.trim()
+        }
+        result.male = male
+      } else if (hasTitle && hasGender && !hasDoubleTitle) {
+        result.gender = parts[0]
+        result.title = parts[1]
+        result.firstName = parts[parts.length-1]
+        for (let i = 2; i < parts.length - 1; i++) {
+          result.lastName = result.lastName + " " + parts[i]
+          result.lastName = result.lastName.trim()
+        }
+        result.hasTitle = true
+        result.male = male
+      } else if (hasTitle && hasDoubleTitle && !hasGender) {
+        result.title = parts[0] + " " + parts[1]
+        result.firstName = parts[parts.length-1]
+        for (let i = 2; i < parts.length - 1; i++) {
+          result.lastName = result.lastName + " " + parts[i]
+          result.lastName = result.lastName.trim()
+        }
+        result.hasTitle = true
+      } else if (hasTitle && hasDoubleTitle && hasGender) {
+        result.gender = parts[0]
+        result.title = parts[1] + " " + parts[2]
+        result.firstName = parts[parts.length-1]
+        for (let i = 3; i < parts.length - 1; i++) {
+          result.lastName = result.lastName + " " + parts[i]
+          result.lastName = result.lastName.trim()
+        }
+        result.hasTitle = true
+        result.male = male
+      } else {
+        result.firstName = parts[parts.length-1]
+        for (let i = 0; i < parts.length - 1; i++) {
+          result.lastName = result.lastName + " " + parts[i]
+          result.lastName = result.lastName.trim()
+        }
+      }
     }
 
     return result;
@@ -87,25 +166,29 @@ export class NameSplitterService {
     if (type == "mail"){
       greeting = "mail Sehr geehrte"
       if (name.male == true){
-        greeting.concat("r Herr ")
+        greeting = greeting.concat("r Herr ")
       } else if(name.male == false){
-        greeting.concat(" Frau ")
+        greeting = greeting.concat(" Frau ")
+      } else if(name.male == undefined){
+        greeting = greeting.concat("/r ")
       }
       if (name.hasTitle){
-        greeting.concat(name.title! + " ")
+        greeting = greeting.concat(name.title! + " ")
       }
-      greeting.concat(name.firstName + " " + name.lastName + ",")
+      greeting = greeting.concat(name.firstName + " " + name.lastName + ",")
     } else if(type == "letter"){
       greeting = "letter Sehr geehrte"
       if (name.male == true){
-        greeting.concat("r Herr ")
+        greeting = greeting.concat("r Herr ")
       } else if(name.male == false){
-        greeting.concat(" Frau ")
+        greeting = greeting.concat(" Frau ")
+      } else if(name.male == undefined){
+        greeting = greeting.concat("/r ")
       }
       if (name.hasTitle){
-        greeting.concat(name.title! + " ")
+        greeting = greeting.concat(name.title! + " ")
       }
-      greeting.concat(name.firstName + " " + name.lastName + ",")
+      greeting = greeting.concat(name.firstName + " " + name.lastName + ",")
     } else {
       return "GreetingTypeError!"
     }

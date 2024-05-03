@@ -7,8 +7,9 @@ import {NameSplitterService} from "../../../services/name-splitter.service";
 import {NameModel} from "../../../models/NameModel";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {NgForOf} from "@angular/common";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
-interface SelectGreetingValues{
+interface SelectGreetingValues {
   value: string,
   viewValue: string
 }
@@ -37,34 +38,57 @@ export class SplitifyComponent {
   firstName: string = "";
   lastName: string = "";
 
+  constructor(private snackBar: MatSnackBar) {
+  }
+
   greetingTypes: SelectGreetingValues[] = [
-    { value: 'mail', viewValue: 'Mail' },
-    { value: 'letter', viewValue: 'Brief'}
+    {value: 'mail', viewValue: 'Mail'},
+    {value: 'letter', viewValue: 'Brief'}
   ];
   greetingType: string = "mail"
-  greeting: string = "Sehr geehrte Frau Mustermann, sehr geehrter Herr Beispiel, Sehr geehrter Herr Beispiel! Sehr geehrte Frau Mustermann!";
+  greeting: string = "Beispieltext";
 
   onKey(event: any) {
     this.inputName = event.target.value;
   }
 
   identifyNameParts(): void {
-    console.log(this.inputName);
-    let result: NameModel = this.nameSplitterService.splitName(this.inputName);
-    this.gender = result.gender!
-    this.title = result.title!
-    this.firstName = result.firstName
-    this.lastName= result.lastName
+    if (this.inputName == "") {
+      this.snackBar.open("Bitte geben sie einen Namen ein", "ok", {
+        duration: 5000
+      })
+    } else {
+      console.log(this.inputName);
+      let result: NameModel = this.nameSplitterService.splitName(this.inputName);
+      this.gender = result.gender!
+      this.title = result.title!
+      this.firstName = result.firstName
+      this.lastName = result.lastName
+    }
   }
 
   generateGreeting(): void {
-    let editedName: NameModel = {
-      gender: this.gender,
-      title: this.title,
-      firstName: this.firstName,
-      lastName: this.lastName,
+    if (this.gender == "" && this.title == "" && this.firstName == "" && this.lastName == "") {
+      this.snackBar.open("Bitte erst einen Namen erkennen lassen, bevor sie eine Anrede generieren wollen", "ok", {
+        duration: 5000
+      })
+    } else {
+      let editedName: NameModel = {
+        gender: this.gender,
+        title: this.title,
+        firstName: this.firstName,
+        lastName: this.lastName,
+      }
+      if (this.gender == "Herr" || this.gender == "Hr") {
+        editedName.male = true;
+      } else if (this.gender == "Frau" || this.gender == "Fr") {
+        editedName.male = false;
+      }
+      if (this.title != "") {
+        editedName.hasTitle = true;
+      }
+      console.log(editedName)
+      this.greeting = this.nameSplitterService.generateGreeting(this.greetingType, editedName);
     }
-    console.log(editedName)
-    this.greeting = this.nameSplitterService.generateGreeting(this.greetingType, editedName);
   }
 }
