@@ -5,6 +5,12 @@ import {NameModel} from "../models/NameModel";
   providedIn: 'root'
 })
 export class NameSplitterService {
+  public possibleTitles: string[] = [
+    "Dr ",
+    "Dr. ",
+    "Prof ",
+    "Prof. ",
+  ]
 
   constructor() {
   }
@@ -22,26 +28,24 @@ export class NameSplitterService {
       lastName: "",
     }
 
-    if (name.includes(",")){
+    if (name.includes(",")) {
       hasLastNameBeforeFirstName = true
     }
-    if (name.includes("Dr ")
-      || name.includes("Dr. ")
-      || name.includes("Prof ")
-      || name.includes("Prof. ")) {
-      hasTitle = true;
-    }
-    if (name.includes("Prof Dr")
-      || name.includes("Prof. Dr.")
-      || name.includes("Prof Prof")
-      || name.includes("Prof. Prof.")
-      || name.includes("Dr Dr")
-      || name.includes("Dr. Dr.")) {
-      hasDoubleTitle = true;
-    }
+    this.possibleTitles.forEach(title => {
+      if (name.includes(title)){
+        hasTitle = true
+      }
+    })
+    this.possibleTitles.forEach(title => {
+      this.possibleTitles.forEach(secondTitle => {
+        if (name.includes(title + secondTitle)){
+          hasDoubleTitle = true
+        }
+      })
+    })
     if (name.includes("Fr ") || name.includes("Frau ")) {
       hasGender = true;
-    } else if(name.includes("Hr ") || name.includes("Herr ")) {
+    } else if (name.includes("Hr ") || name.includes("Herr ")) {
       hasGender = true;
       male = true;
     }
@@ -104,10 +108,10 @@ export class NameSplitterService {
           result.lastName = result.lastName.trim()
         }
       }
-    } else if(hasLastNameBeforeFirstName){
+    } else if (hasLastNameBeforeFirstName) {
       if (hasTitle && !hasGender && !hasDoubleTitle) {
         result.title = parts[0]
-        result.firstName = parts[parts.length-1]
+        result.firstName = parts[parts.length - 1]
         for (let i = 1; i < parts.length - 1; i++) {
           result.lastName = result.lastName + " " + parts[i]
           result.lastName = result.lastName.trim()
@@ -115,7 +119,7 @@ export class NameSplitterService {
         result.hasTitle = true
       } else if (!hasTitle && hasGender) {
         result.gender = parts[0]
-        result.firstName = parts[parts.length-1]
+        result.firstName = parts[parts.length - 1]
         for (let i = 1; i < parts.length - 1; i++) {
           result.lastName = result.lastName + " " + parts[i]
           result.lastName = result.lastName.trim()
@@ -124,7 +128,7 @@ export class NameSplitterService {
       } else if (hasTitle && hasGender && !hasDoubleTitle) {
         result.gender = parts[0]
         result.title = parts[1]
-        result.firstName = parts[parts.length-1]
+        result.firstName = parts[parts.length - 1]
         for (let i = 2; i < parts.length - 1; i++) {
           result.lastName = result.lastName + " " + parts[i]
           result.lastName = result.lastName.trim()
@@ -133,7 +137,7 @@ export class NameSplitterService {
         result.male = male
       } else if (hasTitle && hasDoubleTitle && !hasGender) {
         result.title = parts[0] + " " + parts[1]
-        result.firstName = parts[parts.length-1]
+        result.firstName = parts[parts.length - 1]
         for (let i = 2; i < parts.length - 1; i++) {
           result.lastName = result.lastName + " " + parts[i]
           result.lastName = result.lastName.trim()
@@ -142,7 +146,7 @@ export class NameSplitterService {
       } else if (hasTitle && hasDoubleTitle && hasGender) {
         result.gender = parts[0]
         result.title = parts[1] + " " + parts[2]
-        result.firstName = parts[parts.length-1]
+        result.firstName = parts[parts.length - 1]
         for (let i = 3; i < parts.length - 1; i++) {
           result.lastName = result.lastName + " " + parts[i]
           result.lastName = result.lastName.trim()
@@ -150,7 +154,7 @@ export class NameSplitterService {
         result.hasTitle = true
         result.male = male
       } else {
-        result.firstName = parts[parts.length-1]
+        result.firstName = parts[parts.length - 1]
         for (let i = 0; i < parts.length - 1; i++) {
           result.lastName = result.lastName + " " + parts[i]
           result.lastName = result.lastName.trim()
@@ -161,37 +165,25 @@ export class NameSplitterService {
     return result;
   }
 
-  generateGreeting(type: string, name: NameModel): string {
-    let greeting: string = "";
-    if (type == "mail"){
-      greeting = "mail Sehr geehrte"
-      if (name.male == true){
-        greeting = greeting.concat("r Herr ")
-      } else if(name.male == false){
-        greeting = greeting.concat(" Frau ")
-      } else if(name.male == undefined){
-        greeting = greeting.concat("/r ")
-      }
-      if (name.hasTitle){
-        greeting = greeting.concat(name.title! + " ")
-      }
-      greeting = greeting.concat(name.firstName + " " + name.lastName + ",")
-    } else if(type == "letter"){
-      greeting = "letter Sehr geehrte"
-      if (name.male == true){
-        greeting = greeting.concat("r Herr ")
-      } else if(name.male == false){
-        greeting = greeting.concat(" Frau ")
-      } else if(name.male == undefined){
-        greeting = greeting.concat("/r ")
-      }
-      if (name.hasTitle){
-        greeting = greeting.concat(name.title! + " ")
-      }
-      greeting = greeting.concat(name.firstName + " " + name.lastName + ",")
-    } else {
-      return "GreetingTypeError!"
+  generateGreeting(name: NameModel): string {
+    let greeting = `Sehr geehrte`
+    if (name.male == true) {
+      greeting = greeting.concat(`r Herr `)
+    } else if (name.male == false) {
+      greeting = greeting.concat(` Frau `)
+    } else if (name.male == undefined) {
+      greeting = greeting.concat(`/r `)
     }
+    if (name.hasTitle) {
+      greeting = greeting.concat(name.title! + ` `)
+    }
+    greeting = greeting.concat(name.firstName + ` ` + name.lastName + `,`)
+
+    greeting = greeting.concat(`
+
+--- hier Nachricht einfügen ---
+
+Mit freundlichen Grüßen`)
 
     return greeting;
   }

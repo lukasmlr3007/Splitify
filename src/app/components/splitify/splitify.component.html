@@ -3,10 +3,17 @@
     <form class="example-form w-1/4">
       <mat-form-field class="example-full-width items-center w-full">
         <mat-label>Name</mat-label>
-        <input matInput placeholder="Beispiel: Dennis Heine" (keyup)="onKey($event)">
+        <input matInput placeholder="Beispiel: Dennis Heine" (keyup)="onKeyName($event)">
       </mat-form-field>
     </form>
     <button class="m-3" mat-raised-button (click)="identifyNameParts()">erkennen</button>
+    <form class="example-form w-1/4">
+      <mat-form-field class="example-full-width items-center w-full">
+        <mat-label>neuer Titel (genaue Schreibweise beachten, zB Ing. mit Punkt)</mat-label>
+        <input matInput placeholder="Beispiel: Ing." (keyup)="onKeyNewTitle($event)">
+      </mat-form-field>
+    </form>
+    <button class="m-3" mat-raised-button (click)="addNewTitle()">hinzufügen</button>
   </div>
   <div class="flex flex-row justify-center">
     <form class="example-form w-full flex flex-row">
@@ -29,15 +36,9 @@
     </form>
   </div>
   <div class="flex flex-row justify-center">
-    <mat-form-field>
-      <mat-label>Art der Grußform</mat-label>
-      <mat-select [(value)]="greetingType">
-        <mat-option *ngFor="let type of greetingTypes" [value]="type.value">{{type.viewValue}}</mat-option>
-      </mat-select>
-    </mat-form-field>
     <button class="m-3" mat-raised-button (click)="generateGreeting()">Grußformel generieren</button>
   </div>
   <div class="flex flex-row justify-center">
-    <p class="h-[50vh] w-[50vw] border-solid border-2 border-grey-300 rounded-lg p-2">{{greeting}}</p>
+    <textarea class="h-[50vh] w-[50vw] border-solid border-2 border-grey-300 rounded-lg p-2" style="resize: none">{{greeting}}</textarea>
   </div>
 </div>

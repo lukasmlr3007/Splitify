@@ -9,11 +9,6 @@ import {MatOption, MatSelect} from "@angular/material/select";
 import {NgForOf} from "@angular/common";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
-interface SelectGreetingValues {
-  value: string,
-  viewValue: string
-}
-
 @Component({
   selector: 'app-splitify',
   standalone: true,
@@ -37,19 +32,18 @@ export class SplitifyComponent {
   title: string = "";
   firstName: string = "";
   lastName: string = "";
+  newTitle: string = "";
+  greeting: string = `Beispieltext`;
 
   constructor(private snackBar: MatSnackBar) {
   }
 
-  greetingTypes: SelectGreetingValues[] = [
-    {value: 'mail', viewValue: 'Mail'},
-    {value: 'letter', viewValue: 'Brief'}
-  ];
-  greetingType: string = "mail"
-  greeting: string = "Beispieltext";
-
-  onKey(event: any) {
+  onKeyName(event: any) {
     this.inputName = event.target.value;
+  }
+
+  onKeyNewTitle(event: any) {
+    this.newTitle = event.target.value + " ";
   }
 
   identifyNameParts(): void {
@@ -88,7 +82,19 @@ export class SplitifyComponent {
         editedName.hasTitle = true;
       }
       console.log(editedName)
-      this.greeting = this.nameSplitterService.generateGreeting(this.greetingType, editedName);
+      this.greeting = this.nameSplitterService.generateGreeting(editedName);
+    }
+  }
+
+  addNewTitle(): void {
+    console.log(this.newTitle)
+    if (this.nameSplitterService.possibleTitles.length < 20 && this.newTitle.trim() != "") {
+      this.nameSplitterService.possibleTitles.push(this.newTitle.trim() + " ")
+      console.log(this.nameSplitterService.possibleTitles)
+    } else {
+      this.snackBar.open("Es werden nicht mehr als 20 verschiedene Titel unterstützt!", "ok", {
+        duration: 5000
+      })
     }
   }
 }
