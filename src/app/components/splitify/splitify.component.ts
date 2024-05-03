@@ -52,7 +52,6 @@ export class SplitifyComponent {
         duration: 5000
       })
     } else {
-      console.log(this.inputName);
       let result: NameModel = this.nameSplitterService.splitName(this.inputName);
       this.gender = result.gender!
       this.title = result.title!
@@ -81,16 +80,13 @@ export class SplitifyComponent {
       if (this.title != "") {
         editedName.hasTitle = true;
       }
-      console.log(editedName)
       this.greeting = this.nameSplitterService.generateGreeting(editedName);
     }
   }
 
   addNewTitle(): void {
-    console.log(this.newTitle)
     if (this.nameSplitterService.possibleTitles.length < 20 && this.newTitle.trim() != "") {
       this.nameSplitterService.possibleTitles.push(this.newTitle.trim() + " ")
-      console.log(this.nameSplitterService.possibleTitles)
     } else {
       this.snackBar.open("Es werden nicht mehr als 20 verschiedene Titel unterstützt!", "ok", {
         duration: 5000

@@ -52,9 +52,6 @@ export class NameSplitterService {
 
     name = name.replace(",", "")
     let parts: string[] = name.split(" ");
-    console.log("NameSplitter: " + name);
-    console.log(parts)
-    console.log(parts.length)
 
     if (!hasLastNameBeforeFirstName) {
       if (hasTitle && !hasGender && !hasDoubleTitle) {
