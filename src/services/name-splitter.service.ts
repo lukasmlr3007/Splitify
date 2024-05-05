@@ -8,8 +8,10 @@ export class NameSplitterService {
   public possibleTitles: string[] = [
     "Dr ",
     "Dr. ",
+    "Doktor ",
     "Prof ",
     "Prof. ",
+    "Professor ",
   ]
 
   constructor() {
@@ -43,9 +45,9 @@ export class NameSplitterService {
         }
       })
     })
-    if (name.includes("Fr ") || name.includes("Frau ")) {
+    if (name.includes("Fr ") || name.includes("Frau ") || name.includes("Fr. ")) {
       hasGender = true;
-    } else if (name.includes("Hr ") || name.includes("Herr ")) {
+    } else if (name.includes("Hr ") || name.includes("Herr ") || name.includes("Hr. ")) {
       hasGender = true;
       male = true;
     }
@@ -170,6 +172,9 @@ export class NameSplitterService {
       greeting = greeting.concat(` Frau `)
     } else if (name.male == undefined) {
       greeting = greeting.concat(`/r `)
+      if (name.gender != ""){
+        greeting = greeting.concat(name.gender! + ` `)
+      }
     }
     if (name.hasTitle) {
       greeting = greeting.concat(name.title! + ` `)
