@@ -91,7 +91,7 @@ export class SplitifyComponent {
         duration: 5000
       })
     } else {
-      this.snackBar.open("Es werden nicht mehr als 30 verschiedene Titel unterstützt!", "ok", {
+      this.snackBar.open("Der neue Titel darf nicht leer sein & es werden nicht mehr als 30 neue Titel unterstützt!", "ok", {
         duration: 5000
       })
     }
