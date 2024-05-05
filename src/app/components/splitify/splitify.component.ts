@@ -47,7 +47,7 @@ export class SplitifyComponent {
   }
 
   identifyNameParts(): void {
-    if (this.inputName == "") {
+    if (this.inputName.trim() == "") {
       this.snackBar.open("Bitte geben sie einen Namen ein", "ok", {
         duration: 5000
       })
