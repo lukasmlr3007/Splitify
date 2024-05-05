@@ -85,13 +85,13 @@ export class SplitifyComponent {
   }
 
   addNewTitle(): void {
-    if (this.nameSplitterService.possibleTitles.length < 35 && this.newTitle.trim() != "") {
+    if (this.nameSplitterService.possibleTitles.length < 36 && this.newTitle.trim() != "") {
       this.nameSplitterService.possibleTitles.push(this.newTitle.trim() + " ")
       this.snackBar.open("Der Titel wurde hinzugefügt", "ok", {
         duration: 5000
       })
     } else {
-      this.snackBar.open("Es werden nicht mehr als 35 verschiedene Titel unterstützt!", "ok", {
+      this.snackBar.open("Es werden nicht mehr als 30 verschiedene Titel unterstützt!", "ok", {
         duration: 5000
       })
     }
